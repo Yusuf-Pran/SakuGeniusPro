@@ -128,7 +128,7 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
         <div className="p-4 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3 no-print">
           <div className="flex items-center gap-2.5">
             <img
-              src="/Logo.png"
+              src="/logo.png"
               alt="Logo"
               className="w-8 h-8 object-contain rounded-xl shadow-xs"
               referrerPolicy="no-referrer"
@@ -185,7 +185,7 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
               <div>
                 <div className="flex items-center gap-2.5 mb-1">
                   <img
-                    src="/Logo.png"
+                    src="/logo.png"
                     alt="Logo"
                     className="w-9 h-9 object-contain rounded-lg shadow-xs"
                     referrerPolicy="no-referrer"

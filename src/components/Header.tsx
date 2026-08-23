@@ -28,7 +28,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Title & Brand Logo */}
       <div className="flex items-center gap-3">
         <img
-          src="/Logo.png"
+          src="/logo.png"
           alt="SakuGenius Logo"
           className="w-9 h-9 object-contain rounded-xl shadow-xs md:hidden"
           referrerPolicy="no-referrer"

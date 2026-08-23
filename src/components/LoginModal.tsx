@@ -136,7 +136,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           <div className="absolute top-0 right-0 w-44 h-44 bg-white/10 rounded-full blur-2xl -mr-12 -mt-12" />
           <div className="relative z-10 flex flex-col items-center">
             <img
-              src="/Logo.png"
+              src="/logo.png"
               alt="SakuGenius Logo"
               className="w-16 h-16 object-contain rounded-2xl mb-3 shadow-xl border-2 border-white/40 bg-white/10 backdrop-blur-md"
               referrerPolicy="no-referrer"
