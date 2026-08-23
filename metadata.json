@@ -1,0 +1,11 @@
+{
+  "name": "SakuGenius - Keuangan AI",
+  "description": "Aplikasi pencatat keuangan pintar dengan AI Gemini untuk scan struk dan input suara, notifikasi budget interaktif, cetak rekening koran PDF, serta manajemen profil dan kategori anggaran.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
