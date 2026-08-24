@@ -293,7 +293,7 @@ function getFallbackFinancialAdvice(summary: any, overbudgetCategories: any[] = 
       }
 
       // Clean base64 string if data URL prefix exists
-      const base64Data = imageBase64.replace(/^data:[^;]+;base64,/, "");
+      const base64Data = imageBase64.includes(",") ? imageBase64.split(",")[1] : imageBase64;
 
       const ai = getAIClient();
       const prompt = `Analisis foto struk / nota / bill / invoice ini secara teliti.
@@ -360,7 +360,7 @@ ${customPrompt ? `Catatan tambahan pengguna: ${customPrompt}` : ""}`;
       console.error("Error scanning receipt with Gemini:", error);
       return res.status(500).json({
         success: false,
-        error: "Model AI sedang mengalami lonjakan permintaan (503). Silakan coba lagi dalam beberapa detik.",
+        error: "Gagal memproses gambar. Pastikan gambar jelas atau coba beberapa saat lagi.",
       });
     }
   });
@@ -374,7 +374,7 @@ ${customPrompt ? `Catatan tambahan pengguna: ${customPrompt}` : ""}`;
         return res.status(400).json({ error: "Data audio (audioBase64) wajib dikirimkan." });
       }
 
-      const base64Data = audioBase64.replace(/^data:[^;]+;base64,/, "");
+      const base64Data = audioBase64.includes(",") ? audioBase64.split(",")[1] : audioBase64;
       const ai = getAIClient();
 
       const categoriesList = availableCategories.length > 0 
