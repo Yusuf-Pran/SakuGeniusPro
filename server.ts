@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 
@@ -143,7 +142,7 @@ app.post("/api/auth/validate-license", async (req, res) => {
   });
 
 // Helper to call Gemini with automatic model fallback on 503 (high demand) and other transient errors
-const GEMINI_MODELS = ["gemini-3.7-flash", "gemini-flash-latest", "gemini-3.1-flash-lite"];
+const GEMINI_MODELS = ["gemini-2.5-flash", "gemini-1.5-flash"];
 
 async function generateGeminiContentWithFallback(ai: GoogleGenAI, requestConfig: any) {
   let lastError: any = null;
@@ -536,13 +535,15 @@ Berikan 3-4 saran finansial praktis, singkat, padat, dan memotivasi dalam bahasa
 
   // Vite middleware for development vs static serve for production
   if (process.env.NODE_ENV !== "production") {
-    createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    }).then((vite) => {
-      app.use(vite.middlewares);
-      app.listen(PORT, "0.0.0.0", () => {
-        console.log(`SakuGenius Dev Server running on http://localhost:${PORT}`);
+    import("vite").then(({ createServer: createViteServer }) => {
+      createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      }).then((vite) => {
+        app.use(vite.middlewares);
+        app.listen(PORT, "0.0.0.0", () => {
+          console.log(`SakuGenius Dev Server running on http://localhost:${PORT}`);
+        });
       });
     });
   } else {

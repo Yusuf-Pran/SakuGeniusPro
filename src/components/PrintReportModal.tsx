@@ -47,15 +47,13 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
   const [topLogoError, setTopLogoError] = useState(false);
   const [docLogoError, setDocLogoError] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-
+  
   if (!isOpen) return null;
 
   // Filter transactions by month
   const monthTransactions = transactions
     .filter((t) => t.tanggal.startsWith(selectedMonth))
-    .sort(
-      (a, b) => new Date(a.tanggal).getTime() - new Date(b.tanggal).getTime(),
-    );
+    .sort((a, b) => new Date(a.tanggal).getTime() - new Date(b.tanggal).getTime());
 
   // Calculations
   const totalIncome = monthTransactions
@@ -77,8 +75,7 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
   monthTransactions
     .filter((t) => t.jenis === "Pengeluaran")
     .forEach((t) => {
-      categoryExpenses[t.kategori] =
-        (categoryExpenses[t.kategori] || 0) + t.nominal;
+      categoryExpenses[t.kategori] = (categoryExpenses[t.kategori] || 0) + t.nominal;
     });
 
   const expenseCategories = categories.filter((c) => c.jenis === "Pengeluaran");
@@ -97,42 +94,40 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
   const handlePrint = async () => {
     const element = document.getElementById("printable-report");
     if (!element) return;
-
+    
     setIsGenerating(true);
-
+    
     try {
-      const canvas = await toCanvas(element, {
-        pixelRatio: 2,
+      const canvas = await toCanvas(element, { 
+        pixelRatio: 2, 
         backgroundColor: "#ffffff",
       });
-
+      
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
-
+      
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-
+      
       const canvasWidth = canvas.width;
       const canvasHeight = canvas.height;
       const ratio = pdfWidth / canvasWidth;
-
+      
       const imgHeight = canvasHeight * ratio;
       let heightLeft = imgHeight;
       let position = 0;
-
+      
       pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
       heightLeft -= pdfHeight;
-
+      
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
         pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
         heightLeft -= pdfHeight;
       }
-
-      pdf.save(
-        `Laporan_Keuangan_${selectedMonth}_${userName.replace(/\s+/g, "_")}.pdf`,
-      );
+      
+      pdf.save(`Laporan_Keuangan_${selectedMonth}_${userName.replace(/\s+/g, "_")}.pdf`);
     } catch (err) {
       console.error("Gagal mencetak PDF:", err);
       alert("Terjadi kesalahan saat memproses PDF.");
@@ -154,7 +149,7 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
           <div className="flex items-center gap-2.5">
             {!topLogoError ? (
               <img
-                src="/logo.png"
+                src="/Logo.png"
                 alt="Logo"
                 onError={() => setTopLogoError(true)}
                 className="w-8 h-8 object-contain rounded-xl shadow-xs"
@@ -202,219 +197,179 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
         {/* PRINTABLE FINANCIAL STATEMENT CANVAS */}
         <div className="flex-1 overflow-auto bg-slate-100 dark:bg-slate-900 p-4">
           <div className="flex justify-center min-w-max">
-            <div
-              id="printable-report"
+            <div 
+              id="printable-report" 
               className="bg-white text-slate-900 font-sans p-10 shadow-sm rounded-none sm:rounded-xl shrink-0"
               style={{ width: "800px", minWidth: "800px", minHeight: "1131px" }}
             >
-              {/* Header Section */}
-              <div className="flex justify-between items-start mb-10">
-                <div className="flex items-start gap-4">
-                  {!docLogoError ? (
-                    <img
-                      src="/logo.png"
-                      alt="Logo"
-                      onError={() => setDocLogoError(true)}
-                      className="w-12 h-12 object-contain"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <SakuGeniusLogo className="w-12 h-12" />
-                  )}
-                  <div className="pt-0.5">
-                    <h1 className="text-xl font-black tracking-widest text-slate-900 uppercase leading-none mb-1.5">
-                      {appName || "SAKUGENIUS"}
-                    </h1>
-                    <h2 className="text-sm font-bold text-slate-800 tracking-wide uppercase">
-                      LAPORAN KEUANGAN KAMU
-                    </h2>
-                    <div className="mt-8 text-[11px] text-slate-600 space-y-1.5">
-                      <p className="uppercase">YTH. {userName || "PENGGUNA"}</p>
-                      <p className="uppercase">
-                        {userEmail || "PENGGUNA@SAKUGENIUS.APP"}
-                      </p>
-                      <p className="uppercase mt-2">INDONESIA</p>
-                    </div>
+            {/* Header Section */}
+            <div className="flex justify-between items-start mb-10">
+              <div className="flex items-start gap-4">
+                {!docLogoError ? (
+                  <img
+                    src="/Logo.png"
+                    alt="Logo"
+                    onError={() => setDocLogoError(true)}
+                    className="w-12 h-12 object-contain"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <SakuGeniusLogo className="w-12 h-12" />
+                )}
+                <div className="pt-0.5">
+                  <h1 className="text-xl font-black tracking-widest text-slate-900 uppercase leading-none mb-1.5">
+                    {appName || "SAKUGENIUS"}
+                  </h1>
+                  <h2 className="text-sm font-bold text-slate-800 tracking-wide uppercase">
+                    LAPORAN KEUANGAN KAMU
+                  </h2>
+                  <div className="mt-8 text-[11px] text-slate-600 space-y-1.5">
+                    <p className="uppercase">YTH. {userName || "PENGGUNA"}</p>
+                    <p className="uppercase">{userEmail || "PENGGUNA@SAKUGENIUS.APP"}</p>
+                    <p className="uppercase mt-2">INDONESIA</p>
                   </div>
-                </div>
-
-                <div className="text-right text-[10px] text-slate-700">
-                  <table className="ml-auto text-left uppercase">
-                    <tbody>
-                      <tr>
-                        <td className="pr-4 py-0.5">HALAMAN</td>
-                        <td className="font-semibold text-slate-900">: 1/1</td>
-                      </tr>
-                      <tr>
-                        <td className="pr-4 py-0.5">PERIODE</td>
-                        <td className="font-semibold text-slate-900">
-                          : {getMonthDisplay(selectedMonth)}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="pr-4 py-0.5">MATA UANG</td>
-                        <td className="font-semibold text-slate-900">: IDR</td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
               </div>
 
-              <div className="border-t border-slate-300 pt-4 mb-8">
-                <h3 className="text-[11px] font-bold text-slate-900 uppercase mb-1">
-                  CATATAN:
-                </h3>
-                <p className="text-[11px] text-slate-600">
-                  {appName || "SakuGenius"} mencatat sesuai dengan input
-                  transaksi pengguna dalam rentang waktu 1 bulan.
-                </p>
-              </div>
-
-              {/* Budget Monitor Section */}
-              {expenseCategories.length > 0 && (
-                <div className="mb-10">
-                  <h3 className="text-[11px] font-bold text-slate-900 uppercase mb-3 border-b border-slate-300 pb-1.5">
-                    MONITOR ANGGARAN & PENGELUARAN KATEGORI
-                  </h3>
-                  <div className="grid grid-cols-2 gap-x-8 gap-y-4">
-                    {expenseCategories.map((cat) => {
-                      const used = categoryExpenses[cat.nama] || 0;
-                      const pct =
-                        cat.budget > 0 ? (used / cat.budget) * 100 : 0;
-                      const isOver = cat.budget > 0 && used > cat.budget;
-
-                      return (
-                        <div key={cat.id} className="text-[11px]">
-                          <div className="flex justify-between items-end mb-1.5">
-                            <span className="font-bold text-slate-800 uppercase">
-                              {cat.nama}
-                            </span>
-                            <span
-                              className={`${isOver ? "text-red-700 font-bold" : "text-slate-600"}`}
-                            >
-                              Rp {used.toLocaleString("id-ID")}{" "}
-                              {cat.budget > 0
-                                ? `/ Rp ${cat.budget.toLocaleString("id-ID")}`
-                                : ""}
-                            </span>
-                          </div>
-                          {cat.budget > 0 && (
-                            <div className="w-full bg-slate-100 h-1.5 rounded-none overflow-hidden">
-                              <div
-                                className={`h-full ${
-                                  isOver
-                                    ? "bg-red-600"
-                                    : pct > 80
-                                      ? "bg-amber-500"
-                                      : "bg-slate-800"
-                                }`}
-                                style={{ width: `${Math.min(pct, 100)}%` }}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Mutation Table Section */}
-              <div className="mb-10">
-                <table className="w-full text-xs border-collapse">
-                  <thead>
-                    <tr className="border-y border-slate-900 text-left font-bold uppercase text-slate-900">
-                      <th className="py-3 px-2 w-28">TANGGAL</th>
-                      <th className="py-3 px-2">KETERANGAN</th>
-                      <th className="py-3 px-2 text-right w-40">
-                        MUTASI KREDIT (CR)
-                      </th>
-                      <th className="py-3 px-2 text-right w-40">
-                        MUTASI DEBIT (DB)
-                      </th>
+              <div className="text-right text-[10px] text-slate-700">
+                <table className="ml-auto text-left uppercase">
+                  <tbody>
+                    <tr>
+                      <td className="pr-4 py-0.5">HALAMAN</td>
+                      <td className="font-semibold text-slate-900">: 1/1</td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {monthTransactions.length === 0 ? (
-                      <tr>
-                        <td
-                          colSpan={4}
-                          className="py-8 text-center text-slate-500 italic"
-                        >
-                          Tidak ada data transaksi pada periode ini.
-                        </td>
-                      </tr>
-                    ) : (
-                      monthTransactions.map((t) => {
-                        const [year, month, day] = t.tanggal.split("-");
-
-                        return (
-                          <tr key={t.id} className="text-slate-700">
-                            <td className="py-4 px-2 align-top">
-                              {day}/{month}
-                            </td>
-                            <td className="py-4 px-2">
-                              <strong className="text-slate-900 uppercase block mb-1">
-                                {t.kategori}
-                              </strong>
-                              <span className="text-slate-500">{t.nama}</span>
-                            </td>
-                            <td className="py-4 px-2 text-right align-top">
-                              {t.jenis === "Pemasukan"
-                                ? t.nominal.toLocaleString("id-ID")
-                                : ""}
-                            </td>
-                            <td className="py-4 px-2 text-right align-top">
-                              {t.jenis === "Pengeluaran"
-                                ? t.nominal.toLocaleString("id-ID")
-                                : ""}
-                            </td>
-                          </tr>
-                        );
-                      })
-                    )}
+                    <tr>
+                      <td className="pr-4 py-0.5">PERIODE</td>
+                      <td className="font-semibold text-slate-900">: {getMonthDisplay(selectedMonth)}</td>
+                    </tr>
+                    <tr>
+                      <td className="pr-4 py-0.5">MATA UANG</td>
+                      <td className="font-semibold text-slate-900">: IDR</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
+            </div>
 
-              {/* Document Footer */}
-              <div className="border-t border-slate-300 pt-6 flex justify-between items-start text-[11px]">
-                <div className="text-slate-400 italic">
-                  Dicetak: {new Date().toLocaleDateString("id-ID")},{" "}
-                  {new Date().toLocaleTimeString("id-ID")}
-                </div>
-                <div className="w-72">
-                  <table className="w-full text-slate-900 font-bold uppercase">
-                    <tbody>
-                      <tr>
-                        <td className="py-1">MUTASI CR</td>
-                        <td className="w-4 text-center">:</td>
-                        <td className="text-right py-1">
-                          Rp {totalIncome.toLocaleString("id-ID")}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="py-1">MUTASI DB</td>
-                        <td className="w-4 text-center">:</td>
-                        <td className="text-right py-1">
-                          Rp {totalExpense.toLocaleString("id-ID")}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="py-2 mt-1">SALDO (ALL TIME)</td>
-                        <td className="w-4 text-center">:</td>
-                        <td className="text-right py-2">
-                          Rp {totalBalanceAllTime.toLocaleString("id-ID")}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+            <div className="border-t border-slate-300 pt-4 mb-8">
+              <h3 className="text-[11px] font-bold text-slate-900 uppercase mb-1">CATATAN:</h3>
+              <p className="text-[11px] text-slate-600">
+                {appName || "SakuGenius"} mencatat sesuai dengan input transaksi pengguna dalam rentang waktu 1 bulan.
+              </p>
+            </div>
+
+            {/* Budget Monitor Section */}
+            {expenseCategories.length > 0 && (
+              <div className="mb-10">
+                <h3 className="text-[11px] font-bold text-slate-900 uppercase mb-3 border-b border-slate-300 pb-1.5">
+                  MONITOR ANGGARAN & PENGELUARAN KATEGORI
+                </h3>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                  {expenseCategories.map((cat) => {
+                    const used = categoryExpenses[cat.nama] || 0;
+                    const pct = cat.budget > 0 ? (used / cat.budget) * 100 : 0;
+                    const isOver = cat.budget > 0 && used > cat.budget;
+
+                    return (
+                      <div key={cat.id} className="text-[11px]">
+                        <div className="flex justify-between items-end mb-1.5">
+                          <span className="font-bold text-slate-800 uppercase">{cat.nama}</span>
+                          <span className={`${isOver ? "text-red-700 font-bold" : "text-slate-600"}`}>
+                            Rp {used.toLocaleString("id-ID")} {cat.budget > 0 ? `/ Rp ${cat.budget.toLocaleString("id-ID")}` : ""}
+                          </span>
+                        </div>
+                        {cat.budget > 0 && (
+                          <div className="w-full bg-slate-100 h-1.5 rounded-none overflow-hidden">
+                            <div
+                              className={`h-full ${
+                                isOver ? "bg-red-600" : pct > 80 ? "bg-amber-500" : "bg-slate-800"
+                              }`}
+                              style={{ width: `${Math.min(pct, 100)}%` }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
+            )}
+
+            {/* Mutation Table Section */}
+            <div className="mb-10">
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="border-y border-slate-900 text-left font-bold uppercase text-slate-900">
+                    <th className="py-3 px-2 w-28">TANGGAL</th>
+                    <th className="py-3 px-2">KETERANGAN</th>
+                    <th className="py-3 px-2 text-right w-40">MUTASI KREDIT (CR)</th>
+                    <th className="py-3 px-2 text-right w-40">MUTASI DEBIT (DB)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {monthTransactions.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="py-8 text-center text-slate-500 italic">
+                        Tidak ada data transaksi pada periode ini.
+                      </td>
+                    </tr>
+                  ) : (
+                    monthTransactions.map((t) => {
+                      const [year, month, day] = t.tanggal.split("-");
+                      
+                      return (
+                        <tr key={t.id} className="text-slate-700">
+                          <td className="py-4 px-2 align-top">{day}/{month}</td>
+                          <td className="py-4 px-2">
+                            <strong className="text-slate-900 uppercase block mb-1">{t.kategori}</strong>
+                            <span className="text-slate-500">{t.nama}</span>
+                          </td>
+                          <td className="py-4 px-2 text-right align-top">
+                            {t.jenis === "Pemasukan" ? t.nominal.toLocaleString("id-ID") : ""}
+                          </td>
+                          <td className="py-4 px-2 text-right align-top">
+                            {t.jenis === "Pengeluaran" ? t.nominal.toLocaleString("id-ID") : ""}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
             </div>
+
+            {/* Document Footer */}
+            <div className="border-t border-slate-300 pt-6 flex justify-between items-start text-[11px]">
+              <div className="text-slate-400 italic">
+                Dicetak: {new Date().toLocaleDateString("id-ID")}, {new Date().toLocaleTimeString("id-ID")}
+              </div>
+              <div className="w-72">
+                <table className="w-full text-slate-900 font-bold uppercase">
+                  <tbody>
+                    <tr>
+                      <td className="py-1">MUTASI CR</td>
+                      <td className="w-4 text-center">:</td>
+                      <td className="text-right py-1">Rp {totalIncome.toLocaleString("id-ID")}</td>
+                    </tr>
+                    <tr>
+                      <td className="py-1">MUTASI DB</td>
+                      <td className="w-4 text-center">:</td>
+                      <td className="text-right py-1">Rp {totalExpense.toLocaleString("id-ID")}</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 mt-1">SALDO (ALL TIME)</td>
+                      <td className="w-4 text-center">:</td>
+                      <td className="text-right py-2">Rp {totalBalanceAllTime.toLocaleString("id-ID")}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
           </div>
         </div>
       </motion.div>
     </div>
   );
 };
+

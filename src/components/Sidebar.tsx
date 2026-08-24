@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  LayoutDashboard,
-  PlusCircle,
-  ListFilter,
-  Settings,
-  Sparkles,
-  LogOut,
-  Wallet,
-  ShieldCheck,
-} from "lucide-react";
+import { LayoutDashboard, PlusCircle, ListFilter, Settings, Sparkles, LogOut, Wallet, ShieldCheck } from "lucide-react";
 import { SakuGeniusLogo } from "./SakuGeniusLogo";
 
 interface SidebarProps {
@@ -42,7 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
         {!imgError ? (
           <img
-            src="/logo.png"
+            src="/Logo.png"
             alt="SakuGenius Logo"
             onError={() => setImgError(true)}
             className="w-10 h-10 object-contain rounded-2xl shadow-md shadow-sky-500/20 flex-shrink-0"
@@ -66,9 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="p-3.5 rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/40 dark:to-violet-950/40 border border-indigo-100 dark:border-indigo-900/50 shadow-xs">
           <div className="flex items-center gap-2 mb-1.5">
             <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-            <span className="text-xs font-bold text-slate-900 dark:text-white">
-              AI Gemini 3.7
-            </span>
+            <span className="text-xs font-bold text-slate-900 dark:text-white">AI Gemini 3.7</span>
           </div>
           <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2.5 leading-snug">
             Catat struk & suara otomatis dalam hitungan detik.
@@ -102,9 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
-              <Icon
-                className={`w-4 h-4 ${isActive ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400"}`}
-              />
+              <Icon className={`w-4 h-4 ${isActive ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400"}`} />
               <span>{item.label}</span>
             </button>
           );

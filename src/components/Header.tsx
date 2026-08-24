@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  Moon,
-  Sun,
-  Bell,
-  Sparkles,
-  Cloud,
-  ShieldCheck,
-  User,
-} from "lucide-react";
+import { Moon, Sun, Bell, Sparkles, Cloud, ShieldCheck, User } from "lucide-react";
 import { BudgetNotification } from "../types";
 import { SakuGeniusLogo } from "./SakuGeniusLogo";
 
@@ -39,7 +31,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-3">
         {!imgError ? (
           <img
-            src="/logo.png"
+            src="/Logo.png"
             alt="SakuGenius Logo"
             onError={() => setImgError(true)}
             className="w-9 h-9 object-contain rounded-xl shadow-xs md:hidden"
@@ -99,11 +91,7 @@ export const Header: React.FC<HeaderProps> = ({
           className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-colors"
           title="Ganti Tema"
         >
-          {isDark ? (
-            <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
-          ) : (
-            <Moon className="w-4 h-4 sm:w-5 sm:h-5" />
-          )}
+          {isDark ? <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" /> : <Moon className="w-4 h-4 sm:w-5 sm:h-5" />}
         </button>
 
         {/* User Initial Badge */}
