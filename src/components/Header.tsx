@@ -1,6 +1,15 @@
 import React, { useState } from "react";
-import { Moon, Sun, Bell, Sparkles, Cloud, ShieldCheck, User } from "lucide-react";
+import {
+  Moon,
+  Sun,
+  Bell,
+  Sparkles,
+  Cloud,
+  ShieldCheck,
+  User,
+} from "lucide-react";
 import { BudgetNotification } from "../types";
+import { SakuGeniusLogo } from "./SakuGeniusLogo";
 
 interface HeaderProps {
   title: string;
@@ -22,17 +31,23 @@ export const Header: React.FC<HeaderProps> = ({
   userName,
 }) => {
   const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const [imgError, setImgError] = useState(false);
 
   return (
     <header className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs px-4 sm:px-8 py-3.5 flex justify-between items-center z-20 sticky top-0 transition-colors">
       {/* Title & Brand Logo */}
       <div className="flex items-center gap-3">
-        <img
-          src="/logo.png"
-          alt="SakuGenius Logo"
-          className="w-9 h-9 object-contain rounded-xl shadow-xs md:hidden"
-          referrerPolicy="no-referrer"
-        />
+        {!imgError ? (
+          <img
+            src="/logo.png"
+            alt="SakuGenius Logo"
+            onError={() => setImgError(true)}
+            className="w-9 h-9 object-contain rounded-xl shadow-xs md:hidden"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <SakuGeniusLogo className="w-9 h-9 md:hidden rounded-xl" />
+        )}
         <div>
           <h1 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
             {title}
@@ -84,7 +99,11 @@ export const Header: React.FC<HeaderProps> = ({
           className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-colors"
           title="Ganti Tema"
         >
-          {isDark ? <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" /> : <Moon className="w-4 h-4 sm:w-5 sm:h-5" />}
+          {isDark ? (
+            <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+          ) : (
+            <Moon className="w-4 h-4 sm:w-5 sm:h-5" />
+          )}
         </button>
 
         {/* User Initial Badge */}

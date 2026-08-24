@@ -1,5 +1,15 @@
-import React from "react";
-import { LayoutDashboard, PlusCircle, ListFilter, Settings, Sparkles, LogOut, Wallet, ShieldCheck } from "lucide-react";
+import React, { useState } from "react";
+import {
+  LayoutDashboard,
+  PlusCircle,
+  ListFilter,
+  Settings,
+  Sparkles,
+  LogOut,
+  Wallet,
+  ShieldCheck,
+} from "lucide-react";
+import { SakuGeniusLogo } from "./SakuGeniusLogo";
 
 interface SidebarProps {
   currentView: "dashboard" | "input" | "history" | "settings";
@@ -18,6 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   userPhone,
   onLogout,
 }) => {
+  const [imgError, setImgError] = useState(false);
   const navItems = [
     { id: "dashboard" as const, label: "Dashboard", icon: LayoutDashboard },
     { id: "input" as const, label: "Input Data", icon: PlusCircle },
@@ -29,12 +40,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shadow-sm z-30 transition-colors flex-shrink-0">
       {/* Brand Header */}
       <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
-        <img
-          src="/logo.png"
-          alt="SakuGenius Logo"
-          className="w-10 h-10 object-contain rounded-2xl shadow-md shadow-sky-500/20 flex-shrink-0"
-          referrerPolicy="no-referrer"
-        />
+        {!imgError ? (
+          <img
+            src="/logo.png"
+            alt="SakuGenius Logo"
+            onError={() => setImgError(true)}
+            className="w-10 h-10 object-contain rounded-2xl shadow-md shadow-sky-500/20 flex-shrink-0"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <SakuGeniusLogo className="w-10 h-10" />
+        )}
         <div className="overflow-hidden">
           <h1 className="text-lg font-black tracking-tight text-slate-900 dark:text-white leading-tight">
             SakuGenius
@@ -50,7 +66,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="p-3.5 rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/40 dark:to-violet-950/40 border border-indigo-100 dark:border-indigo-900/50 shadow-xs">
           <div className="flex items-center gap-2 mb-1.5">
             <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-            <span className="text-xs font-bold text-slate-900 dark:text-white">AI Gemini 3.7</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-white">
+              AI Gemini 3.7
+            </span>
           </div>
           <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2.5 leading-snug">
             Catat struk & suara otomatis dalam hitungan detik.
@@ -84,7 +102,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
-              <Icon className={`w-4 h-4 ${isActive ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400"}`} />
+              <Icon
+                className={`w-4 h-4 ${isActive ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400"}`}
+              />
               <span>{item.label}</span>
             </button>
           );

@@ -23,21 +23,20 @@ function getAIClient(): GoogleGenAI {
   return aiClient;
 }
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
+const app = express();
+const PORT = Number(process.env.PORT || 3000);
 
-  // Increase payload limit for base64 image and audio processing
-  app.use(express.json({ limit: "50mb" }));
-  app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+// Increase payload limit for base64 image and audio processing
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
-  // Health check endpoint
-  app.get("/api/health", (req, res) => {
-    res.json({ status: "ok", timestamp: new Date().toISOString() });
-  });
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
 
-  // Google Apps Script License & User Registration/Logging Endpoint
-  app.post("/api/auth/validate-license", async (req, res) => {
+// Google Apps Script License & User Registration/Logging Endpoint
+app.post("/api/auth/validate-license", async (req, res) => {
     try {
       const { kode, nama, email, phone } = req.body;
 
@@ -537,25 +536,28 @@ Berikan 3-4 saran finansial praktis, singkat, padat, dan memotivasi dalam bahasa
 
   // Vite middleware for development vs static serve for production
   if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
+    createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
+    }).then((vite) => {
+      app.use(vite.middlewares);
+      app.listen(PORT, "0.0.0.0", () => {
+        console.log(`SakuGenius Dev Server running on http://localhost:${PORT}`);
+      });
     });
-    app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
+    
+    // Only listen manually if not running in Vercel Serverless environment
+    if (!process.env.VERCEL) {
+      app.listen(PORT, "0.0.0.0", () => {
+        console.log(`SakuGenius Prod Server running on port ${PORT}`);
+      });
+    }
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`SakuGenius Server running on http://localhost:${PORT}`);
-  });
-}
-
-startServer().catch((err) => {
-  console.error("Failed to start server:", err);
-  process.exit(1);
-});
+export default app;

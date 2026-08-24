@@ -18,9 +18,15 @@ import {
   ChevronUp,
   FileSpreadsheet,
 } from "lucide-react";
+import { SakuGeniusLogo } from "./SakuGeniusLogo";
 
 interface LoginModalProps {
-  onSuccess: (user: { name: string; phone: string; email?: string; licenseCode?: string }) => void;
+  onSuccess: (user: {
+    name: string;
+    phone: string;
+    email?: string;
+    licenseCode?: string;
+  }) => void;
   appName?: string;
   defaultName?: string;
   defaultPhone?: string;
@@ -39,11 +45,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [name, setName] = useState(defaultName || "");
   const [phone, setPhone] = useState(defaultPhone || "");
   const [email, setEmail] = useState(defaultEmail || "");
-  const [accessCode, setAccessCode] = useState(defaultLicense || "SAKUGENIUSPRO");
+  const [accessCode, setAccessCode] = useState(
+    defaultLicense || "SAKUGENIUSPRO",
+  );
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [showScriptGuide, setShowScriptGuide] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,8 +81,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       return;
     }
 
-    if (trimmedCode !== "SAKUGENIUSPRO" && trimmedCode !== "SAKUGENIUS" && trimmedCode !== "DEMO-SAKU") {
-      setErrorMsg("Kode Akses tidak sesuai. Silakan gunakan kode akses resmi: SAKUGENIUSPRO");
+    if (
+      trimmedCode !== "SAKUGENIUSPRO" &&
+      trimmedCode !== "SAKUGENIUS" &&
+      trimmedCode !== "DEMO-SAKU"
+    ) {
+      setErrorMsg(
+        "Kode Akses tidak sesuai. Silakan gunakan kode akses resmi: SAKUGENIUSPRO",
+      );
       return;
     }
 
@@ -135,12 +150,17 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         <div className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-800 p-7 text-white text-center relative overflow-hidden">
           <div className="absolute top-0 right-0 w-44 h-44 bg-white/10 rounded-full blur-2xl -mr-12 -mt-12" />
           <div className="relative z-10 flex flex-col items-center">
-            <img
-              src="/logo.png"
-              alt="SakuGenius Logo"
-              className="w-16 h-16 object-contain rounded-2xl mb-3 shadow-xl border-2 border-white/40 bg-white/10 backdrop-blur-md"
-              referrerPolicy="no-referrer"
-            />
+            {!imgError ? (
+              <img
+                src="/logo.png"
+                alt="SakuGenius Logo"
+                onError={() => setImgError(true)}
+                className="w-16 h-16 object-contain rounded-2xl mb-3 shadow-xl border-2 border-white/40 bg-white/10 backdrop-blur-md"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <SakuGeniusLogo className="w-16 h-16 rounded-2xl mb-3 shadow-xl border-2 border-white/40" />
+            )}
             <div className="flex items-center gap-2">
               <h2 className="text-2xl font-black tracking-tight">{appName}</h2>
               <span className="px-2 py-0.5 rounded-full bg-amber-400 text-amber-950 text-[10px] font-extrabold tracking-wider uppercase shadow">
@@ -160,7 +180,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               Data Pengguna & Kode Akses
             </h3>
             <p className="text-xs text-slate-400">
-              Lengkapi data profil Anda untuk sinkronisasi otomatis ke Google Sheet
+              Lengkapi data profil Anda untuk sinkronisasi otomatis ke Google
+              Sheet
             </p>
           </div>
 
@@ -220,7 +241,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 />
               </div>
               <p className="text-[10.5px] text-indigo-700/80 dark:text-indigo-300/80 font-medium">
-                Gunakan kode akses: <strong className="font-mono font-bold text-indigo-900 dark:text-white">SAKUGENIUSPRO</strong>
+                Gunakan kode akses:{" "}
+                <strong className="font-mono font-bold text-indigo-900 dark:text-white">
+                  SAKUGENIUSPRO
+                </strong>
               </p>
             </div>
 
@@ -302,10 +326,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800 text-center space-y-1">
             <p className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1.5 font-semibold">
               <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Otomatis Tercatat ke Google Sheet Database Pemilik (Anti-Duplikat)</span>
+              <span>
+                Otomatis Tercatat ke Google Sheet Database Pemilik
+                (Anti-Duplikat)
+              </span>
             </p>
             <p className="text-[10px] text-slate-400">
-              Jika user sudah pernah terdaftar (Email / Nomor HP sama), sistem akan memperbarui waktu login tanpa membuat baris duplikat.
+              Jika user sudah pernah terdaftar (Email / Nomor HP sama), sistem
+              akan memperbarui waktu login tanpa membuat baris duplikat.
             </p>
           </div>
 
@@ -320,7 +348,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 <Code2 className="w-3.5 h-3.5 text-indigo-500" />
                 <span>Format Script Google Sheet Anti-Duplikat (Code.gs)</span>
               </span>
-              {showScriptGuide ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              {showScriptGuide ? (
+                <ChevronUp className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5" />
+              )}
             </button>
 
             {showScriptGuide && (
@@ -330,10 +362,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 className="mt-2 p-3 bg-slate-900 rounded-xl text-[10.5px] text-indigo-200 font-mono space-y-2 border border-slate-800 overflow-x-auto"
               >
                 <div className="text-slate-400 font-sans text-[11px] flex items-center justify-between">
-                  <span>Ganti kode di Extensions &gt; Apps Script (Code.gs) dengan ini agar data tidak ganda:</span>
+                  <span>
+                    Ganti kode di Extensions &gt; Apps Script (Code.gs) dengan
+                    ini agar data tidak ganda:
+                  </span>
                 </div>
                 <pre className="text-[10px] text-emerald-400 leading-relaxed overflow-x-auto whitespace-pre p-2 bg-slate-950 rounded-lg">
-{`function doGet(e) {
+                  {`function doGet(e) {
   return handleRequest(e);
 }
 
