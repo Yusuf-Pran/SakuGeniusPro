@@ -63,9 +63,9 @@ export const initialSampleTransactions: Transaction[] = [
 export function getInitialState(): AppState {
   const defaultSettings = {
     appName: "SakuGenius",
-    userName: "Pengguna SakuGenius",
-    userEmail: "pengguna@sakugenius.app",
-    userPhone: "081234567890",
+    userName: "",
+    userEmail: "",
+    userPhone: "",
     soundEnabled: true,
     autoAiCategory: true,
     currency: "IDR",

@@ -325,9 +325,9 @@ export default function App() {
     return (
       <LoginModal
         appName={state.settings.appName}
-        defaultName={state.settings.userName || "Pengguna SakuGenius"}
-        defaultPhone={state.settings.userPhone || "081234567890"}
-        defaultEmail={state.settings.userEmail || "pengguna@sakugenius.app"}
+        defaultName={state.settings.userName || ""}
+        defaultPhone={state.settings.userPhone || ""}
+        defaultEmail={state.settings.userEmail || ""}
         defaultLicense={state.settings.licenseCode || "SAKUGENIUSPRO"}
         onSuccess={handleLoginSuccess}
       />

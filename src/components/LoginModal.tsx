@@ -13,20 +13,12 @@ import {
   Loader2,
   Sparkles,
   Lock,
-  Code2,
-  ChevronDown,
-  ChevronUp,
   FileSpreadsheet,
 } from "lucide-react";
 import { SakuGeniusLogo } from "./SakuGeniusLogo";
 
 interface LoginModalProps {
-  onSuccess: (user: {
-    name: string;
-    phone: string;
-    email?: string;
-    licenseCode?: string;
-  }) => void;
+  onSuccess: (user: { name: string; phone: string; email?: string; licenseCode?: string }) => void;
   appName?: string;
   defaultName?: string;
   defaultPhone?: string;
@@ -45,13 +37,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [name, setName] = useState(defaultName || "");
   const [phone, setPhone] = useState(defaultPhone || "");
   const [email, setEmail] = useState(defaultEmail || "");
-  const [accessCode, setAccessCode] = useState(
-    defaultLicense || "SAKUGENIUSPRO",
-  );
+  const [accessCode, setAccessCode] = useState(defaultLicense || "SAKUGENIUSPRO");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-  const [showScriptGuide, setShowScriptGuide] = useState(false);
   const [imgError, setImgError] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -81,14 +70,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       return;
     }
 
-    if (
-      trimmedCode !== "SAKUGENIUSPRO" &&
-      trimmedCode !== "SAKUGENIUS" &&
-      trimmedCode !== "DEMO-SAKU"
-    ) {
-      setErrorMsg(
-        "Kode Akses tidak sesuai. Silakan gunakan kode akses resmi: SAKUGENIUSPRO",
-      );
+    if (trimmedCode !== "SAKUGENIUSPRO" && trimmedCode !== "SAKUGENIUS" && trimmedCode !== "DEMO-SAKU") {
+      setErrorMsg("Kode Akses tidak sesuai. Silakan gunakan kode akses resmi: SAKUGENIUSPRO");
       return;
     }
 
@@ -152,7 +135,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           <div className="relative z-10 flex flex-col items-center">
             {!imgError ? (
               <img
-                src="/logo.png"
+                src="/Logo.png"
                 alt="SakuGenius Logo"
                 onError={() => setImgError(true)}
                 className="w-16 h-16 object-contain rounded-2xl mb-3 shadow-xl border-2 border-white/40 bg-white/10 backdrop-blur-md"
@@ -180,8 +163,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               Data Pengguna & Kode Akses
             </h3>
             <p className="text-xs text-slate-400">
-              Lengkapi data profil Anda untuk sinkronisasi otomatis ke Google
-              Sheet
+              Lengkapi data profil Anda untuk sinkronisasi otomatis ke Google Sheet
             </p>
           </div>
 
@@ -241,10 +223,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 />
               </div>
               <p className="text-[10.5px] text-indigo-700/80 dark:text-indigo-300/80 font-medium">
-                Gunakan kode akses:{" "}
-                <strong className="font-mono font-bold text-indigo-900 dark:text-white">
-                  SAKUGENIUSPRO
-                </strong>
+                Gunakan kode akses: <strong className="font-mono font-bold text-indigo-900 dark:text-white">SAKUGENIUSPRO</strong>
               </p>
             </div>
 
@@ -326,142 +305,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-800 text-center space-y-1">
             <p className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1.5 font-semibold">
               <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-              <span>
-                Otomatis Tercatat ke Google Sheet Database Pemilik
-                (Anti-Duplikat)
-              </span>
+              <span>Otomatis Tercatat ke Google Sheet Database Pemilik (Anti-Duplikat)</span>
             </p>
             <p className="text-[10px] text-slate-400">
-              Jika user sudah pernah terdaftar (Email / Nomor HP sama), sistem
-              akan memperbarui waktu login tanpa membuat baris duplikat.
+              Jika user sudah pernah terdaftar (Email / Nomor HP sama), sistem akan memperbarui waktu login tanpa membuat baris duplikat.
             </p>
           </div>
 
-          {/* Google Sheet Apps Script Template Helper for Owner */}
-          <div className="pt-1 border-t border-slate-100 dark:border-slate-800">
-            <button
-              type="button"
-              onClick={() => setShowScriptGuide((prev) => !prev)}
-              className="w-full py-1.5 flex items-center justify-between text-[11px] font-bold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition-colors"
-            >
-              <span className="flex items-center gap-1.5">
-                <Code2 className="w-3.5 h-3.5 text-indigo-500" />
-                <span>Format Script Google Sheet Anti-Duplikat (Code.gs)</span>
-              </span>
-              {showScriptGuide ? (
-                <ChevronUp className="w-3.5 h-3.5" />
-              ) : (
-                <ChevronDown className="w-3.5 h-3.5" />
-              )}
-            </button>
 
-            {showScriptGuide && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                className="mt-2 p-3 bg-slate-900 rounded-xl text-[10.5px] text-indigo-200 font-mono space-y-2 border border-slate-800 overflow-x-auto"
-              >
-                <div className="text-slate-400 font-sans text-[11px] flex items-center justify-between">
-                  <span>
-                    Ganti kode di Extensions &gt; Apps Script (Code.gs) dengan
-                    ini agar data tidak ganda:
-                  </span>
-                </div>
-                <pre className="text-[10px] text-emerald-400 leading-relaxed overflow-x-auto whitespace-pre p-2 bg-slate-950 rounded-lg">
-                  {`function doGet(e) {
-  return handleRequest(e);
-}
-
-function doPost(e) {
-  return handleRequest(e);
-}
-
-function handleRequest(e) {
-  var lock = LockService.getScriptLock();
-  lock.tryLock(10000);
-
-  try {
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName("Users") || ss.getActiveSheet();
-    
-    // Inisialisasi Header jika kosong
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(["TANGGAL LOGIN", "KODE LISENSI", "NAMA", "EMAIL", "NO HP", "STATUS"]);
-    }
-
-    var params = e && e.parameter ? e.parameter : {};
-    if (e && e.postData && e.postData.contents) {
-      try {
-        var body = JSON.parse(e.postData.contents);
-        for (var key in body) { params[key] = body[key]; }
-      } catch(err) {}
-    }
-
-    var kode = (params.kode || "SAKUGENIUSPRO").toString().trim();
-    var nama = (params.nama || "").toString().trim();
-    var email = (params.email || "").toString().trim().toLowerCase();
-    var phone = (params.phone || "").toString().trim();
-    var tanggal = params.tanggal || new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" });
-
-    if (!email && !phone) {
-      return ContentService.createTextOutput(JSON.stringify({
-        valid: false,
-        message: "Email atau No HP wajib diisi."
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-
-    var lastRow = sheet.getLastRow();
-    var existingRow = -1;
-
-    // Cek apakah Email atau No HP sudah pernah terdaftar (Mulai baris ke-2)
-    if (lastRow >= 2) {
-      var data = sheet.getRange(2, 1, lastRow - 1, 6).getValues();
-      for (var i = 0; i < data.length; i++) {
-        var rowEmail = (data[i][3] || "").toString().trim().toLowerCase();
-        var rowPhone = (data[i][4] || "").toString().trim();
-
-        // Jika Email sama atau No HP sama -> User yang sama
-        if ((email && rowEmail === email) || (phone && rowPhone === phone)) {
-          existingRow = i + 2; // Index baris aktual di Google Sheet
-          break;
-        }
-      }
-    }
-
-    if (existingRow > 0) {
-      // UPDATE DATA YANG SUDAH ADA (TIDAK MEMBUAT BARIS BARU)
-      sheet.getRange(existingRow, 1).setValue(tanggal); // Update Tanggal Login Terakhir
-      sheet.getRange(existingRow, 2).setValue(kode);
-      if (nama) sheet.getRange(existingRow, 3).setValue(nama);
-      if (email) sheet.getRange(existingRow, 4).setValue(email);
-      if (phone) sheet.getRange(existingRow, 5).setValue(phone);
-      sheet.getRange(existingRow, 6).setValue("AKTIF");
-
-      return ContentService.createTextOutput(JSON.stringify({
-        valid: true,
-        isExisting: true,
-        message: "Selamat datang kembali! Data login berhasil diperbarui.",
-        nama: nama
-      })).setMimeType(ContentService.MimeType.JSON);
-    } else {
-      // TAMBAH USER BARU KARENA BELUM PERNAH ADA
-      sheet.appendRow([tanggal, kode, nama, email, phone, "AKTIF"]);
-
-      return ContentService.createTextOutput(JSON.stringify({
-        valid: true,
-        isExisting: false,
-        message: "Pengguna baru berhasil terdaftar.",
-        nama: nama
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-  } finally {
-    lock.releaseLock();
-  }
-}`}
-                </pre>
-              </motion.div>
-            )}
-          </div>
         </div>
       </motion.div>
     </div>
